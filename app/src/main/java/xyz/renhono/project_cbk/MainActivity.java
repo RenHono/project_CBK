@@ -7,8 +7,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.ScrollerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -170,6 +172,50 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager.setAdapter(fragPagerAD);
         tabLayout.setupWithViewPager(viewPager);
+
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+
+            private int frgPosition;
+            private boolean canJump;
+
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+
+                Log.i("onPageScrollStateXX", "onPageScrolled------>arg0：" + position + "\nonPageScrolled------>arg1:" + positionOffset + "\nonPageScrolled------>arg2:" + positionOffsetPixels);
+                if (canJump && positionOffset == 0 && positionOffsetPixels == 0) {
+                    drawerLayout.openDrawer(fragmainslide);
+
+                }
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+                Log.i("onPageSelected ", "" + position);
+
+                frgPosition = position;
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+                if (state == viewPager.SCROLL_STATE_DRAGGING && frgPosition == (fragmentList.size() - 1)) {
+
+                    canJump = true;
+
+                } else {
+                    canJump = false;
+                }
+
+
+            }
+        });
 
     }
 
